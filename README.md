@@ -33,21 +33,21 @@ The system is constructed as a physical ring of four compute nodes, where output
               │
               └──────> [ HUMAN RETINA ]
 
-2. Core Principles
+##2. Core Principles
 No CPU Logic: The CPU is reduced to a bootstrap loader and I/O bridge. All simulation logic resides in Compute Shaders.
 
 Time as Phase: The system uses the Kuramoto Model for synchronization. It does not "boot"; it resonates.
 
 Memory as Space: Data is not stored in files; it is preserved as geometric structure in a persistent VRAM loop.
 
-3. Proof of Implementation (Prototype Results)
+##3. Proof of Implementation (Prototype Results)
 Agent Count: 10,000 active entities.
 
 Phase Lock Stability: < 0.5ms deviation.
 
 Energy Efficiency: ~120W Total System Power (vs 800W x86 equivalent).
 
-4. Documentation
+##4. Documentation
 Detailed specifications and philosophical foundations:
 
 * **[Official Manifesto & Philosophy](https://toctet.com/manifesto.html)**
