@@ -23,6 +23,7 @@ Logic is executed solely through the collision of geometric states (SDF) within 
 ## 1. The Architectural Loop (Tetra-Torus)
 The system is constructed as a physical ring of four compute nodes, where output of one ontological layer becomes the geometry of the next.
 
+```text
 [ GPU 1: GEOMETRY ] <══════(VRAM RING)══════> [ GPU 2: BIOLOGY ]
               ▲                                             │
               │                                             │
@@ -32,6 +33,7 @@ The system is constructed as a physical ring of four compute nodes, where output
        [ GPU 4: OBSERVER ] <══════(VRAM RING)══════> [ GPU 3: SOCIOLOGY ]
               │
               └──────> [ HUMAN RETINA ]
+```
 
 ## 2. Core Principles
 No CPU Logic: The CPU is reduced to a bootstrap loader and I/O bridge. All simulation logic resides in Compute Shaders.
