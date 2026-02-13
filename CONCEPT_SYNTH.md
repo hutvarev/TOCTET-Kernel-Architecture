@@ -1,6 +1,6 @@
 # SPECIFICATION: S.Y.N.T.H (Series V)
 **Designation:** Synthetic Vector Man (SVM-01)  
-**Kernel:** TOCTET v1.3 Native  
+**Kernel:** TOCTET v1.0 Native  
 **Architecture:** Bicameral / Tetra-Torus / Hardware-Abstracted  
 
 > "The anthropomorphic form is a legacy constraint. The Synth is a modular vector execution unit."
