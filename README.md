@@ -55,6 +55,7 @@ Detailed specifications and philosophical foundations:
 * **[Official Manifesto & Philosophy](https://toctet.com/manifesto.html)**
 * **[Engineering Whitepaper (HTML)](https://toctet.com/whitepaper.html)**
 * **[Full Specification PDF](https://toctet.com/TOCTET_HUTVAREV_SYNTHETIC_REALITY_KERNEL.pdf)**
+* **[The Kernel Philosophy](CONCEPT_KERNEL.md)** *The shift from Database-Server to Phase-Beacon. The Centrifuge Model.*
 
 
 
