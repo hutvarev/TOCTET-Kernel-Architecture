@@ -56,6 +56,7 @@ Detailed specifications and philosophical foundations:
 * **[Engineering Whitepaper (HTML)](https://toctet.com/whitepaper.html)**
 * **[Full Specification PDF](https://toctet.com/TOCTET_HUTVAREV_SYNTHETIC_REALITY_KERNEL.pdf)**
 * **[The Kernel Philosophy](CONCEPT_KERNEL.md)** *The shift from Database-Server to Phase-Beacon. The Centrifuge Model.*
+* **[Sensory Organs (Entropy Array)](ENTROPY_ARRAY.md)** *The 7 physical sources of randomness (Vacuum, Magnet, Chemistry, etc).*
 
 
 
