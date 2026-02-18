@@ -1,4 +1,4 @@
-# TOCTET Specification (v0)
+# TOCTET Specification (v0.2)
 **Phase-Synchronous Field Architecture · 2026**  
 Author: Artem Hutvarev
 
@@ -8,63 +8,126 @@ Author: Artem Hutvarev
 
 TOCTET defines computation as the evolution of a bounded dynamic field.
 
-State is not stored in registers or memory addresses.  
 State is represented as oscillator variables **(θ phase, ω frequency)**  
 plus derived metrics computed from the field.
 
-Execution is not an ordered list of instructions.  
-Execution is: `field update → measurement → guard → collapse → observation`
+Execution cycle:
+```
+field update → measurement → guard → collapse → observation
+```
 
 ---
 
 ## 2. Time
 
-Time in TOCTET is **phase progression**, not a global scheduler tick.
+Time is **phase progression**, not a global scheduler tick.
 
-A practical implementation may use a discrete integration step `dt`,  
-while preserving phase-first semantics throughout.
+A practical implementation uses discrete integration step `dt`,  
+while preserving phase-first semantics.
 
-The RTC (real-time clock) provides the reference step.  
-The system chooses its own micro-reset interval — visible as a range, not as a clock.
+The system selects its own micro-reset interval —  
+expressed as a coherence range, not as a clock period.
 
 ---
 
-## 3. Coherence Range (Guard)
+## 3. Coherence — Formal Definition (v0)
 
-The system maintains a coherence window `[coherence_min, coherence_max]`.
+Coherence `R` is the **global order parameter** of the oscillator field,  
+defined as the magnitude of the mean complex phase vector:
 
-Reference values:
+```
+R = | (1/N) · Σ exp(i·θ_k) |    k = 1..N
+
+R = 1.0   → perfect synchrony (all oscillators in phase)
+R = 0.0   → complete incoherence (uniform phase distribution)
+```
+
+This is the Kuramoto order parameter.  
+In TOCTET, `R` is the primary health metric of the field.
+
+**Coherence window (Golden Window):**
 ```
 coherence_min = 0.864
 coherence_max = 1.44   (GOLDEN_BASE)
 ```
 
-If measured coherence exits the allowed window, the Guard applies a **micro-reset**:
-- local drift correction
-- bounded rollback / normalization
-- stability restoration without full restart
+The field is considered **stable** when `R ∈ [0.864, 1.44]`.  
+Below 0.864: field is drifting → Guard activates.  
+Above 1.44: field is over-synchronized → entropy injection recommended.
 
-Micro-reset is minimally invasive. It preserves continuity.  
-It is designed to be invisible to the observer — a correction, not a restart.
+**Local coherence** (per-cluster):  
+Computed as the order parameter within a subset of oscillators.  
+Used for cluster-level Guard decisions independent of global R.
+
+**Spectral coherence** (optional, v1):  
+Frequency-domain measure of phase stability over time.  
+Not required for v0 implementation.
 
 ---
 
-## 4. Primitives
+## 4. Guard — Micro-Reset Policy
 
-### 4.1 Field
+The Guard monitors `R` and applies corrections when the field exits the stability window.
+
+### 4.1 Trigger Conditions
+
 ```
-θ[i]     — phase of oscillator i
-ω[i]     — frequency of oscillator i
-R        — coherence (Kuramoto order parameter)
-drift    — rate of phase divergence
-energy   — aggregate field energy
+R < coherence_min (0.864)   → drift detected → reset type: normalize or rollback
+R > coherence_max (1.44)    → over-sync detected → reset type: reseed
 ```
 
-Optional: layered field projections (see §6).
+### 4.2 Reset Types
 
-### 4.2 Rift
-A parameterized operator that modifies topology, coupling, or local field constraints.
+**normalize**  
+Gently pull oscillator phases toward the mean phase.  
+Proportional correction: `θ_k += α · (θ_mean - θ_k)`  
+Strength `α ∈ [0.01, 0.1]` — weak, preserves local structure.  
+Use when: mild drift, R slightly below threshold.
 
+**rollback**  
+Restore field state from the last known stable snapshot.  
+Snapshot is taken every N ticks when R is within window.  
+Use when: rapid drift, R falling fast, normalize insufficient.
+
+**reseed**  
+Inject controlled noise into over-synchronized regions.  
+`θ_k += noise(σ)` for oscillators with |θ_k - θ_mean| < ε  
+Use when: R > coherence_max, field crystallizing, diversity lost.
+
+### 4.3 Reset Policy Selection
+
+```
+R falling, rate slow     → normalize
+R falling, rate fast     → rollback
+R > coherence_max        → reseed
+cluster R < threshold    → local normalize (cluster only)
+global R stable but      → local rollback (affected cluster)
+  cluster diverging
+```
+
+### 4.4 Continuity Invariant
+
+Micro-reset must preserve the continuity invariant:  
+**the observer must not perceive a restart.**
+
+Reset magnitude is bounded: no oscillator phase changes by more than `π/4` per reset.  
+If correction requires more than `π/4`: use rollback, not normalize.
+
+---
+
+## 5. Primitives
+
+### 5.1 Field
+```
+θ[N]     phase array
+ω[N]     frequency array
+R        global coherence (Kuramoto order parameter)
+R_local  per-cluster coherence map
+drift    dR/dt — rate of coherence change
+energy   Σ ω[k]² / N
+```
+
+### 5.2 Rift
 ```
 rift(type, params, mode)
 
@@ -72,135 +135,117 @@ type:  ring | cluster | spiral | mirror | split | gate | sync | noise
 mode:  loop | one-shot | N{count}
 ```
 
-Rifts do not execute. They **inject constraints** into the field.  
-The field evolves according to those constraints.
+Rifts inject constraints. The field evolves according to constraints.
 
-### 4.3 Guard
+### 5.3 Guard
 ```
-guard(coherence_min, coherence_max, reset_policy)
-
-reset_policy: local | bounded | normalize
+guard(
+  coherence_min,     // 0.864
+  coherence_max,     // 1.44
+  reset_policy,      // normalize | rollback | reseed
+  snapshot_interval  // ticks between stable snapshots
+)
 ```
 
-### 4.4 Collapse
-Maps superposed state layers into a single observable frame.
-
+### 5.4 Collapse
 ```
 collapse(layers[], mask) → observable_frame
 ```
 
-What is not selected by collapse remains in superposition.
+---
+
+## 6. Canonical Rift Set
+
+```
+ring      cyclic coupling baseline
+cluster   modular community formation
+spiral    gradient coupling along axis
+mirror    symmetry / involution
+split     independent sub-field partition
+gate      SDF form-cutting / threshold / mask
+sync      phase-lock discipline
+noise     controlled entropy injection
+```
 
 ---
 
-## 5. Canonical Rift Set
+## 7. Layer Stack
 
 ```
-ring      cyclic coupling baseline; foundational manifold
-cluster   community formation; modular islands of coupling
-spiral    gradient coupling; structured drift along axis
-mirror    symmetry operation; involution on state
-split     partition into independent sub-fields
-gate      threshold / mask / SDF form-cutting
-sync      phase-lock discipline; PLL-analog
-noise     controlled entropy injection; prevents crystallization
-```
-
-Composition: a scene is an ordered sequence of rift injections followed by collapse.
-
----
-
-## 6. Layer Stack
-
-```
-[ observation layer ]   ← MRT output channels
+[ observation layer ]   ← MRT outputs
 [ mask / gate layer ]
-[ modulation layer n ]
-[ ...               ]
-[ modulation layer 1 ]
+[ modulation layer(s) ]
 [ base field layer  ]
 ```
 
-Layers are superposed, not executed sequentially.  
-Collapse resolves the superposition into one observable frame.
+Collapse resolves superposition → one observable frame.
 
 ---
 
-## 7. MRT Observability
-
-Multi-channel simultaneous output of field state.
+## 8. MRT Observability
 
 ```
-mrt_phase       θ array
-mrt_frequency   ω array
-mrt_coherence   stability map
-mrt_drift       divergence map
+mrt_phase       θ[N]
+mrt_frequency   ω[N]
+mrt_coherence   R map (global + local)
+mrt_drift       dR/dt map
 mrt_gate        mask / collapse map
 mrt_events      phase-zero crossings, threshold events
 ```
 
-All channels are available simultaneously.  
-Observability is not optional — it is the primary mechanism for system validation.
-
 ---
 
-## 8. Boogie Woogie Language (v0)
-
-TOCTET's native programming model.
+## 9. Boogie Woogie (v0)
 
 ```
-BOOGIE  scheduler / mixer
-        operates within [coherence_min, coherence_max]
-        applies micro-reset when range is approached
-        holds the field in its stability window
+BOOGIE   scheduler within [coherence_min, coherence_max]
+WOOGIE   ring script: loop | N-shot | fractal phase 288
 
-WOOGIE  ring script
-        loop | N-shot | fractal (phase 288)
-        the programmable unit of field behavior
-```
-
-**Rune** — atomic semantic unit:
-```
-not a bit (0 or 1)
-a square with a bitmask pattern
-interpretation + coupling rules + stability intent = valid rune
-without all three: noise generator
+RUNE     bitmask pattern square
+         requires: interpretation + coupling rules + stability intent
+         without all three: noise generator
 ```
 
 ---
 
-## 9. State Storage
-
-TOCTET favors minimal storage:
+## 10. State Storage
 
 ```
-STORE:      seeds, rift patterns, metric anchors
-DON'T STORE: raw streams, full state arrays
+STORE        seeds, rift patterns, metric anchors
+DON'T STORE  raw streams, full state arrays
+ENABLES      state-trajectory playback, non-linear scrubbing
 ```
-
-This enables **state-trajectory playback**:
-- replay of state evolution
-- non-linear scrubbing
-- comparison between sessions
-- archival of coherence trajectories
 
 ---
 
-## 10. Swarm Protocol
-
-Distributed nodes synchronize via minimal packets:
+## 11. Swarm Protocol
 
 ```
 packet = { phase_anchor, coherence_window, compact_metrics }
 ```
 
 No full state replication.  
-Each node maintains its own field; synchronization is constraint propagation.
+Synchronization = constraint propagation, not state copy.
 
 ---
 
-## 11. Scope
+## 12. External Boundary
 
-This document is public technical disclosure and prior art.  
-Published: 2026  
-Author: Artem Hutvarev
+TOCTET does not accept raw internet traffic.  
+All external data enters through the Link Window boundary node.  
+See [LINK_WINDOW.md](LINK_WINDOW.md).
+
+---
+
+## Changelog
+
+```
+v0.1  initial release
+v0.2  §3 coherence formally defined (Kuramoto R, local R, spectral v1)
+      §4 micro-reset policy formalized (normalize / rollback / reseed)
+      §12 external boundary reference added
+```
+
+---
+
+*TOCTET Kernel Architecture · Artem Hutvarev · 2026*
