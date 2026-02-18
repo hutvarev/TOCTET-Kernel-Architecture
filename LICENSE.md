@@ -1,23 +1,87 @@
-# THE HIPPOCRATIC LICENSE 3.0 (TOCTET EDITION)
+# TOCTET Proprietary License
+**Version 1.0 · 2026**
 
-Licensor: Artem Hutvarev (TOCTET Architect)
-Software: TOCTET Synthetic Reality Kernel & Protocols
+Copyright (c) 2026 Artem Hutvarev. All rights reserved.
 
-1. PURPOSE
-The purpose of this License is to ensure that the Software is used solely for beneficial, non-violent, and life-affirming purposes, protecting the intellectual property from exploitation by harmful entities.
+---
 
-2. GRANT OF LICENSE
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, SUBJECT TO THE FOLLOWING CONDITIONS:
+## 1. Ownership
 
-3. ETHICAL STANDARDS (THE SHIELD)
-The Software shall NOT be used by any individual or entity for:
-    (a) MILITARY OR WARFARE purposes, including cyber-warfare, kinetic weapons systems, or surveillance targeting.
-    (b) VIOLATION OF HUMAN RIGHTS as defined by the United Nations Universal Declaration of Human Rights.
-    (c) MALICIOUS ACTS, including the creation of malware, spyware, or systems designed to damage infrastructure or extract data without consent.
-    (d) PATENT AGGRESSION. Any entity that initiates a patent infringement lawsuit against the Licensor or any other entity using this Software automatically loses all rights to use this Software (The "Patent Retaliation Clause").
+All content in this repository — including but not limited to specifications,
+architecture descriptions, algorithms, language definitions, diagrams, and
+reference implementations — is the exclusive intellectual property of
+**Artem Hutvarev** (trading as HUTVAREV).
 
-4. NO WARRANTY
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+---
 
-5. PRIOR ART DECLARATION
-By publishing this source code, the Author (Artem Hutvarev) establishes PRIOR ART (Est. Feb 13, 2026). Any attempt to patent the mechanisms described herein (Hutvarev Protocol, Tetra-Torus Topology) by third parties is invalid and constitutes theft of public knowledge.
+## 2. Permitted Use
+
+You MAY:
+
+- Read and study this material for personal, non-commercial research
+- Reference this repository with full attribution for academic citation
+- Discuss and analyze the concepts in public forums with attribution
+
+---
+
+## 3. Prohibited Use
+
+You MAY NOT, without explicit written permission from the author:
+
+- Use any part of this work in a commercial product or service
+- Incorporate any specification, algorithm, or concept into software
+  distributed to third parties
+- Create derivative works based on this architecture
+- Use the name TOCTET, HUTVAREV, Boogie Woogie, or associated marks
+  in any product, service, or publication
+- Apply this work to weapons systems, surveillance infrastructure,
+  or any application the author has explicitly declined (see POSITION.md)
+
+---
+
+## 4. Attribution
+
+Any permitted use must carry the following attribution:
+
+> TOCTET Kernel Architecture · Artem Hutvarev · 2026  
+> https://toctet.com
+
+---
+
+## 5. Prior Art
+
+This license does not limit the prior art status of this disclosure.
+Publication of this repository constitutes a timestamped public record
+of independent invention by Artem Hutvarev.
+
+---
+
+## 6. No Warranty
+
+This work is provided as-is for research and disclosure purposes.
+The author makes no warranties of any kind.
+
+---
+
+## 7. Future Licensing
+
+The author reserves the right to:
+
+- Release future versions under different license terms
+- Issue commercial licenses to specific parties
+- Transition to an open license (including Hippocratic License)
+  when the author deems appropriate
+
+Current status: **All rights reserved. Contact author for licensing.**
+
+---
+
+## Contact
+
+For licensing inquiries:  
+**Artem Hutvarev** · https://toctet.com · https://audiovideo.digital
+
+---
+
+*TOCTET Kernel Architecture · Artem Hutvarev · 2026*  
+*All rights reserved.*
