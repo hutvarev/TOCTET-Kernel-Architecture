@@ -53,6 +53,41 @@ Coherence window: `[0.864, 1.44]`
 
 ---
 
+## Mathematical Foundations
+
+TOCTET is grounded in established dynamical systems theory.  
+The architecture maps directly onto the following:
+
+**Kuramoto order parameter** — primary health metric of the field:
+```
+R · exp(iψ) = (1/N) · Σ exp(i·θ_k)
+```
+Global `R` + local field `R(x)` per rift topology = complete state map.
+
+**Ott-Antonsen reduction** — the mathematical basis for "springs instead of stones":  
+large N oscillators compress into a small number of parameters.  
+This is the Guard/Boogie operator. You choose the step. The lattice obeys.
+
+**Laplacian eigenmodes** — since rift = topology operator,  
+the natural state coordinate basis is the eigenmodes of the coupling graph:
+```
+L · v_k = λ_k · v_k
+```
+Each canonical rift has a spectral correspondence:
+`cluster → low eigenmodes · split → Fiedler vector · sync → eigenmode locking`
+
+**Geometric structure:**
+```
+Torus     θ lives on a torus — time as closed phase cycle
+Cube      Laplacian eigenmodes — stable coordinate rooms
+Pyramid   Guard/OA reduction — the will that makes it dance
+```
+
+Two uroboros rotating in opposite directions.  
+Their intersection: the TOCTET viewport lattice.
+
+---
+
 ## External Boundary
 
 TOCTET is a closed field system.  
@@ -66,7 +101,7 @@ See [LINK_WINDOW.md](LINK_WINDOW.md) for the boundary protocol.
 
 | File | Contents |
 |---|---|
-| [SPEC.md](SPEC.md) | Formal model, coherence definition, micro-reset policy |
+| [SPEC.md](SPEC.md) | Formal model, coherence, micro-reset, OA/WS/Laplacian |
 | [TOPOLOGY_LIBRARY.md](TOPOLOGY_LIBRARY.md) | Canonical rifts as visual language |
 | [MRT_OBSERVABILITY.md](MRT_OBSERVABILITY.md) | Precision introspection via multi-channel output |
 | [TYPOGRAPHY_SDF.md](TYPOGRAPHY_SDF.md) | Field-native glyphs in dynamic SDF |
