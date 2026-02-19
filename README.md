@@ -88,6 +88,66 @@ Their intersection: the TOCTET viewport lattice.
 
 ---
 
+## Two Examples
+
+### 1. Living Frame Rate
+
+Standard graphics interpolate between states.  
+The result is smooth — and dead.
+
+TOCTET does not interpolate. It **collapses**.
+
+```
+micro-reset = frame boundary
+between resets: field lives its own life
+at reset: state jumps — discrete, physical, weighted
+```
+
+At 24 frames this produces what interpolation cannot:  
+weight, inertia, cost per step.
+
+The dinosaurs in Jurassic Park felt real not because of resolution  
+but because every step had mass.  
+The T-1000 felt alien not because of effects  
+but because its state changes were discrete.
+
+TOCTET renders at the physics boundary, not at the clock boundary.  
+The field breathes. Not dead CGI. Living state.
+
+---
+
+### 2. Glyphs as Field Communication Table
+
+Standard typography is a renderer bolted onto a display.  
+It fights dynamic geometry. It always loses.
+
+TOCTET treats glyphs as **runes** — pattern injections into the field.
+
+```
+character 'A'  →  not a bitmap to draw
+               →  a gate rift with a specific mask
+               →  field inside the glyph behaves differently
+               →  field outside responds to the boundary
+```
+
+`ToctetFontTables` is not a font file.  
+It is a **communication table** — 256 entries,  
+each one a field instruction that happens to be readable as text.
+
+```
+Segment14[128]    14-segment patterns   uint16 per glyph
+Matrix5x7[128]    5×7 dot matrix        5 bytes per glyph
+```
+
+When the field jumps at micro-reset,  
+the glyph boundary jumps with it.  
+Typography and physics share the same frame boundary.
+
+Text is not rendered. Text is **part of the field**.  
+The alphabet is a subset of the topology library.
+
+---
+
 ## External Boundary
 
 TOCTET is a closed field system.  
